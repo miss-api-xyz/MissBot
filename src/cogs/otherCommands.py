@@ -23,22 +23,25 @@ class OtherCommands(commands.Cog):
       if id == None:
         return await ctx.send("Specify the ID of the channel in which you want to find available pictures.")
 
-      await ctx.send("Process execution...")
-        
-      channel = self.client.get_channel(id)
+      try:
+          await ctx.send("Process execution...")
 
-      arr = []
-      messages = await channel.history(limit=limit).filter(lambda m: m.author == member).flatten()
+          channel = self.client.get_channel(id)
 
-      for att in messages:
-        for pick in att.attachments:
-          arr.append(pick.proxy_url)
-      
-      if len(arr) <= 0:
-        return await ctx.send(f"Nothing was found in **{channel}** from user **{member}**.")
+          arr = []
+          messages = await channel.history(limit=limit).filter(lambda m: m.author == member).flatten()
 
-      await ctx.send(f"{createPaste(channel, arr, 'json')}")
-      await channel.purge(limit=limit, check=lambda m: m.author == member)
+          for att in messages:
+            for pick in att.attachments:
+              arr.append(pick.proxy_url)
+
+          if len(arr) <= 0:
+            return await ctx.send(f"Nothing was found in **{channel}** from user **{member}**.")
+
+          await ctx.send(f"{createPaste(channel, arr, 'json')}")
+          await channel.purge(limit=limit, check=lambda m: m.author == member)
+      except Exception as error:
+        await ctx.send(f"```py\n{error}```")
 
     
     @commands.command()
