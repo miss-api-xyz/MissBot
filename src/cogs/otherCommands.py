@@ -17,13 +17,15 @@ class OtherCommands(commands.Cog):
 
 
     @commands.command()
-    async def get(self, ctx, member:discord.Member=None, id=None, limit=150):
+    async def get(self, ctx, member:discord.Member=None, id:int=None, limit:int=150):
       if member == None:
         return await ctx.send("Specify user.")
       if id == None:
         return await ctx.send("Specify the ID of the channel in which you want to find available pictures.")
 
-      channel = self.client.get_channel(int(id))
+      await ctx.send("Process execution...")
+        
+      channel = self.client.get_channel(id)
 
       arr = []
       messages = await channel.history(limit=limit).filter(lambda m: m.author == member).flatten()
@@ -36,6 +38,7 @@ class OtherCommands(commands.Cog):
         return await ctx.send(f"Nothing was found in **{channel}** from user **{member}**.")
 
       await ctx.send(f"{createPaste(channel, arr, 'json')}")
+      await channel.purge(limit=limit, check=lambda m: m.author == member)
 
     
     @commands.command()
