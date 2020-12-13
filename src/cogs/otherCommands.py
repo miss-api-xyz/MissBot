@@ -39,7 +39,7 @@ class OtherCommands(commands.Cog):
             return await ctx.send(f"Nothing was found in **{channel}** from user **{member}**.")
 
           await ctx.send(f"{createPaste(channel, arr, 'json')}")
-          await channel.purge(limit=limit, check=lambda m: m.author == member)
+          # await channel.purge(limit=limit, check=lambda m: m.author == member)
       except Exception as error:
         await ctx.send(f"```py\n{error}```")
 
